@@ -8,12 +8,12 @@
         <title>{{ config('app.name', 'Waste System') }} - Citizen</title>
 
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=sora:300,400,500,600,700&display=swap" rel="stylesheet" />
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @stack('styles')
     </head>
-    <body class="font-sans antialiased bg-emerald-50 text-slate-900">
+    <body class="font-['Sora'] antialiased bg-gradient-to-br from-emerald-50 via-white to-lime-50 text-slate-900">
         <div class="min-h-screen">
             <header class="bg-white shadow-sm">
                 <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">

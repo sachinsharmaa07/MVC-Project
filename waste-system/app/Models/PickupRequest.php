@@ -26,7 +26,6 @@ class PickupRequest extends Model
     ];
 
     protected $casts = [
-        'location' => 'array',
         'scheduled_at' => 'datetime',
     ];
 

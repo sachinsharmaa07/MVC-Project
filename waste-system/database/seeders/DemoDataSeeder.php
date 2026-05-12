@@ -70,10 +70,28 @@ class DemoDataSeeder extends Seeder
             $admins->push($admin);
         }
 
-        $citizens = User::factory()->count(10)->create(['role' => 'citizen']);
+        $citizens = collect();
+        $demoCitizen = User::factory()->create([
+            'name' => 'Demo Citizen',
+            'email' => 'citizen@waste.local',
+            'role' => 'citizen',
+            'password' => Hash::make('password'),
+        ]);
+        $demoCitizen->assignRole('citizen');
+        $citizens->push($demoCitizen);
+        $citizens = $citizens->merge(User::factory()->count(9)->create(['role' => 'citizen']));
         $citizens->each->assignRole('citizen');
 
-        $drivers = User::factory()->count(5)->create(['role' => 'driver']);
+        $drivers = collect();
+        $demoDriver = User::factory()->create([
+            'name' => 'Demo Driver',
+            'email' => 'driver@waste.local',
+            'role' => 'driver',
+            'password' => Hash::make('password'),
+        ]);
+        $demoDriver->assignRole('driver');
+        $drivers->push($demoDriver);
+        $drivers = $drivers->merge(User::factory()->count(4)->create(['role' => 'driver']));
         $drivers->each->assignRole('driver');
 
         $trucks = collect();

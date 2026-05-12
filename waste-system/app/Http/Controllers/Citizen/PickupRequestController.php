@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreatePickupRequestRequest;
 use App\Jobs\SendPickupRequestConfirmation;
 use App\Models\PickupRequest;
-use Illuminate\Support\Facades\Storage;
 
 class PickupRequestController extends Controller
 {
@@ -32,12 +31,8 @@ class PickupRequestController extends Controller
             $photoPath = $request->file('photo')->store('pickup-photos', 'public');
         }
 
-        $pickupRequest = PickupRequest::create([
+        $pickupRequest = new PickupRequest([
             'citizen_id' => (string) auth()->id(),
-            'location' => [
-                'type' => 'Point',
-                'coordinates' => [(float) $request->longitude, (float) $request->latitude],
-            ],
             'address' => $request->address,
             'waste_type' => $request->waste_type,
             'segregation_status' => 'pending_review',
@@ -46,6 +41,16 @@ class PickupRequestController extends Controller
             'photo_path' => $photoPath,
             'notes' => $request->notes,
         ]);
+
+        // Set location as raw GeoJSON for MongoDB
+        $pickupRequest->setRawAttributes(array_merge($pickupRequest->getAttributes(), [
+            'location' => (object)[
+                'type' => 'Point',
+                'coordinates' => [(float) $request->longitude, (float) $request->latitude],
+            ],
+        ]));
+
+        $pickupRequest->save();
 
         SendPickupRequestConfirmation::dispatch((string) $pickupRequest->id);
 

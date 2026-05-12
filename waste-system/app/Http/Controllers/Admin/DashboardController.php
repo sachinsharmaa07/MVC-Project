@@ -18,8 +18,9 @@ class DashboardController extends Controller
     {
         $metrics = $this->buildMetrics();
         $charts = $this->buildCharts();
+        $activeTrucks = Truck::where('status', 'on_route')->get();
 
-        return view('admin.dashboard', compact('metrics', 'charts'));
+        return view('admin.dashboard', compact('metrics', 'charts', 'activeTrucks'));
     }
 
     public function requests(Request $request)

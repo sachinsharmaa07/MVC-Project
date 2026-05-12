@@ -8,26 +8,26 @@
         <title>{{ config('app.name', 'Waste System') }} - Admin</title>
 
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=sora:300,400,500,600,700&display=swap" rel="stylesheet" />
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         @stack('styles')
     </head>
-    <body class="font-sans antialiased bg-slate-100 text-slate-900">
+    <body class="font-['Sora'] antialiased bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-slate-100">
         <div class="min-h-screen flex">
-            <aside class="w-64 bg-slate-900 text-slate-100 p-6 flex flex-col">
+            <aside class="w-64 bg-slate-950/80 text-slate-100 p-6 flex flex-col border-r border-white/10">
                 <div class="text-xl font-semibold tracking-wide">Waste Admin</div>
                 <nav class="mt-8 space-y-2 text-sm">
-                    <a class="block px-3 py-2 rounded-md hover:bg-slate-800" href="{{ route('admin.dashboard') }}">Dashboard</a>
-                    <a class="block px-3 py-2 rounded-md hover:bg-slate-800" href="{{ route('admin.requests') }}">Requests</a>
-                    <a class="block px-3 py-2 rounded-md hover:bg-slate-800" href="{{ route('admin.routes.index') }}">Routes</a>
-                    <a class="block px-3 py-2 rounded-md hover:bg-slate-800" href="{{ route('admin.analytics') }}">Analytics</a>
-                    <a class="block px-3 py-2 rounded-md hover:bg-slate-800" href="{{ route('admin.export.csv') }}">Export CSV</a>
+                    <a class="block px-3 py-2 rounded-md hover:bg-slate-800/70" href="{{ route('admin.dashboard') }}">Dashboard</a>
+                    <a class="block px-3 py-2 rounded-md hover:bg-slate-800/70" href="{{ route('admin.requests') }}">Requests</a>
+                    <a class="block px-3 py-2 rounded-md hover:bg-slate-800/70" href="{{ route('admin.routes.index') }}">Routes</a>
+                    <a class="block px-3 py-2 rounded-md hover:bg-slate-800/70" href="{{ route('admin.analytics') }}">Analytics</a>
+                    <a class="block px-3 py-2 rounded-md hover:bg-slate-800/70" href="{{ route('admin.export.csv') }}">Export CSV</a>
                 </nav>
             </aside>
 
-            <div class="flex-1 flex flex-col">
-                <header class="bg-white shadow-sm">
+            <div class="flex-1 flex flex-col bg-gradient-to-br from-slate-50 via-white to-emerald-50 text-slate-900">
+                <header class="bg-white/80 backdrop-blur shadow-sm">
                     <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
                         <div class="text-sm text-slate-500">Smart Waste Segregation & Collection</div>
                         <div class="flex items-center gap-4">

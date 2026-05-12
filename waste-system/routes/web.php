@@ -4,12 +4,27 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\RouteController as AdminRouteController;
 use App\Http\Controllers\Citizen\PickupRequestController as CitizenPickupRequestController;
 use App\Http\Controllers\Driver\RouteController as DriverRouteController;
+use App\Http\Controllers\Driver\NotificationController as DriverNotificationController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    $user = auth()->user();
+
+    if ($user) {
+        if ($user->hasRole('admin')) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        if ($user->hasRole('driver')) {
+            return redirect()->route('driver.routes.today');
+        }
+
+        return redirect()->route('citizen.dashboard');
+    }
+
+    return view('auth.landing');
+})->name('home');
 
 Route::get('/dashboard', function () {
     $user = auth()->user();
@@ -54,6 +69,12 @@ Route::middleware(['auth', 'role:driver'])->prefix('driver')->name('driver.')->g
     Route::get('/routes/{id}/stops', [DriverRouteController::class, 'stops'])->name('routes.stops');
     Route::get('/collect/{requestId}', [DriverRouteController::class, 'collectForm'])->name('collect.form');
     Route::post('/collect/{requestId}', [DriverRouteController::class, 'collect'])->name('collect');
+    
+    // Notification routes
+    Route::get('/notifications', [DriverNotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/{id}', [DriverNotificationController::class, 'show'])->name('notifications.show');
+    Route::post('/notifications/{id}/mark-read', [DriverNotificationController::class, 'markRead'])->name('notifications.mark-read');
+    Route::post('/notifications/mark-all-read', [DriverNotificationController::class, 'markAllRead'])->name('notifications.mark-all-read');
 });
 
 require __DIR__.'/auth.php';

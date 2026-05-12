@@ -32,6 +32,10 @@ class RouteController extends Controller
     public function stops(string $id)
     {
         $route = Route::findOrFail($id);
+        $truck = Truck::find($route->truck_id);
+        if (!$truck || $truck->driver_id !== (string) auth()->id()) {
+            abort(403);
+        }
         $pickupIds = collect($route->stops)->pluck('pickup_request_id')->all();
         $requests = PickupRequest::whereIn('_id', $pickupIds)->get()->keyBy('_id');
 
@@ -47,6 +51,13 @@ class RouteController extends Controller
         ]);
 
         $pickupRequest = PickupRequest::findOrFail($requestId);
+        $route = Route::where('stops.pickup_request_id', (string) $pickupRequest->id)->first();
+        if ($route) {
+            $truck = Truck::find($route->truck_id);
+            if (!$truck || $truck->driver_id !== (string) auth()->id()) {
+                abort(403);
+            }
+        }
 
         WasteLog::create([
             'pickup_request_id' => (string) $pickupRequest->id,
@@ -61,7 +72,6 @@ class RouteController extends Controller
             'segregation_status' => $validated['segregation_compliant'] ? 'compliant' : 'non_compliant',
         ]);
 
-        $route = Route::where('stops.pickup_request_id', (string) $pickupRequest->id)->first();
         if ($route) {
             $stops = collect($route->stops)->map(function ($stop) use ($pickupRequest) {
                 if (($stop['pickup_request_id'] ?? '') === (string) $pickupRequest->id) {
@@ -93,6 +103,13 @@ class RouteController extends Controller
     public function collectForm(string $requestId)
     {
         $pickupRequest = PickupRequest::findOrFail($requestId);
+        $route = Route::where('stops.pickup_request_id', (string) $pickupRequest->id)->first();
+        if ($route) {
+            $truck = Truck::find($route->truck_id);
+            if (!$truck || $truck->driver_id !== (string) auth()->id()) {
+                abort(403);
+            }
+        }
 
         return view('driver.collect', compact('pickupRequest'));
     }
