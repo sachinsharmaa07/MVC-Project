@@ -88,7 +88,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     @if (isset($route))
         <script>
-            const stops = @json(collect($route->stops)->sortBy('order_index')->values()->map(function ($stop) use ($requests) {
+            const stops = {!! json_encode(collect($route->stops)->sortBy('order_index')->values()->map(function ($stop) use ($requests) {
                 $request = $requests->get($stop['pickup_request_id'] ?? '');
                 return [
                     'order' => $stop['order_index'] ?? null,
@@ -96,7 +96,7 @@
                     'waste_type' => $request?->waste_type,
                     'location' => $request?->location,
                 ];
-            }));
+            })) !!};
 
             const colors = {
                 dry: '#16a34a',

@@ -41,22 +41,7 @@ class DemoDataSeeder extends Seeder
             ],
         ];
 
-        $permissionModels = [];
-        foreach ($roles as $roleName => $permissions) {
-            Role::firstOrCreate(['name' => $roleName, 'guard_name' => 'web']);
-
-            foreach ($permissions as $permissionName) {
-                $permissionModels[$permissionName] = Permission::firstOrCreate([
-                    'name' => $permissionName,
-                    'guard_name' => 'web',
-                ]);
-            }
-        }
-
-        foreach ($roles as $roleName => $permissions) {
-            $role = Role::where('name', $roleName)->first();
-            $role?->syncPermissions($permissions);
-        }
+        // Skip role/permission creation - use direct user role field instead
 
         $admins = collect();
         for ($i = 1; $i <= 3; $i += 1) {
@@ -66,7 +51,6 @@ class DemoDataSeeder extends Seeder
                 'role' => 'admin',
                 'password' => Hash::make('password'),
             ]);
-            $admin->assignRole('admin');
             $admins->push($admin);
         }
 
@@ -77,10 +61,8 @@ class DemoDataSeeder extends Seeder
             'role' => 'citizen',
             'password' => Hash::make('password'),
         ]);
-        $demoCitizen->assignRole('citizen');
         $citizens->push($demoCitizen);
         $citizens = $citizens->merge(User::factory()->count(9)->create(['role' => 'citizen']));
-        $citizens->each->assignRole('citizen');
 
         $drivers = collect();
         $demoDriver = User::factory()->create([
@@ -89,10 +71,8 @@ class DemoDataSeeder extends Seeder
             'role' => 'driver',
             'password' => Hash::make('password'),
         ]);
-        $demoDriver->assignRole('driver');
         $drivers->push($demoDriver);
         $drivers = $drivers->merge(User::factory()->count(4)->create(['role' => 'driver']));
-        $drivers->each->assignRole('driver');
 
         $trucks = collect();
         foreach ($drivers as $driver) {

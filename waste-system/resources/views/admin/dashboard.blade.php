@@ -101,11 +101,13 @@
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(fleetMap);
 
-        const trucks = @json($activeTrucks->map(fn($truck) => [
-            'id' => (string) $truck->id,
-            'name' => $truck->registration_number,
-            'location' => $truck->current_location,
-        ])->values());
+        const trucks = {!! json_encode($activeTrucks->map(function($truck) {
+            return [
+                'id' => (string) $truck->id,
+                'name' => $truck->registration_number,
+                'location' => $truck->current_location,
+            ];
+        })->values()) !!};
 
         const markers = {};
         const bounds = [];
